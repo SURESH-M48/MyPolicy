@@ -1,5 +1,6 @@
 package com.mypolicy.policy.controller;
 
+import com.mypolicy.policy.dto.CoverageGapResponse;
 import com.mypolicy.policy.dto.PolicyRequest;
 import com.mypolicy.policy.model.Policy;
 import com.mypolicy.policy.model.PolicyStatus;
