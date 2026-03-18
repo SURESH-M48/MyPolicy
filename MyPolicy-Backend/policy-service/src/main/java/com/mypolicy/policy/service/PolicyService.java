@@ -1,9 +1,11 @@
 package com.mypolicy.policy.service;
 
+import com.mypolicy.policy.dto.CoverageGapResponse;
 import com.mypolicy.policy.dto.PolicyRequest;
 import com.mypolicy.policy.model.Policy;
 import com.mypolicy.policy.model.PolicyStatus;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,8 @@ public interface PolicyService {
   List<Policy> getAllPolicies();
 
   Policy updatePolicyStatus(String id, PolicyStatus status);
+
+  CoverageGapResponse calculateCoverageGap(String customerId, BigDecimal annualIncome);// coveragegap
 
   void deletePolicy(String id);
 }

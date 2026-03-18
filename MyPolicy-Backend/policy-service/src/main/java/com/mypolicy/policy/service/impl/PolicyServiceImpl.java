@@ -1,5 +1,6 @@
 package com.mypolicy.policy.service.impl;
 
+import com.mypolicy.policy.dto.CoverageGapResponse;
 import com.mypolicy.policy.dto.PolicyRequest;
 import com.mypolicy.policy.exception.DuplicatePolicyException;
 import com.mypolicy.policy.exception.PolicyNotFoundException;
@@ -10,6 +11,7 @@ import com.mypolicy.policy.service.PolicyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -85,5 +87,26 @@ public class PolicyServiceImpl implements PolicyService {
       throw new PolicyNotFoundException(id, "id");
     }
     repository.deleteById(id);
+  }
+// add coveragegap logic for life insurance only
+  @Override
+  public CoverageGapResponse calculateCoverageGap(String customerId, BigDecimal annualIncome) {
+
+    List<Policy> policies = repository.findByCustomerId(customerId);
+
+    BigDecimal existingCover = policies.stream()
+            .map(Policy::getSumAssured)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    BigDecimal recommendedCover = annualIncome.multiply(BigDecimal.valueOf(15));
+
+    BigDecimal protectionGap = recommendedCover.subtract(existingCover);
+
+    CoverageGapResponse response = new CoverageGapResponse();
+    response.setRecommendedCover(recommendedCover);
+    response.setExistingCover(existingCover);
+    response.setProtectionGap(protectionGap);
+
+    return response;
   }
 }

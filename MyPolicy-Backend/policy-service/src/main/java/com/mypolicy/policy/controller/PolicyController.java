@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,14 @@ public class PolicyController {
   @GetMapping
   public ResponseEntity<List<Policy>> getAllPolicies() {
     return ResponseEntity.ok(policyService.getAllPolicies());
+  }
+// add api endpoint for coveragegap
+  @GetMapping("/coverage-gap/{customerId}")
+  public CoverageGapResponse getCoverageGap(
+        @PathVariable String customerId,
+        @RequestParam BigDecimal annualIncome) {
+
+    return policyService.calculateCoverageGap(customerId, annualIncome);
   }
 
   @PatchMapping("/{id}/status")
